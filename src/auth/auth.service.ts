@@ -49,12 +49,12 @@ export class AuthService {
       };
 
       // Short-lived access token (30s)
-      const accessToken = this.jwtService.sign(payload, { expiresIn: '30s' });
+      const accessToken = this.jwtService.sign(payload, { expiresIn: '1d' });
 
       await this.redisService.set(
         `access-token:${user.id}`,
         accessToken,
-        35, // buffer of 5s more than JWT expiry
+        60 * 60 * 24,
       );
 
       // Long-lived refresh token (7 days)
@@ -118,7 +118,7 @@ export class AuthService {
           email: payload.email,
           fullName: payload.fullName,
         },
-        { expiresIn: '30s' }, // 🔁 New short-lived access token
+        { expiresIn: '1d' }, // 🔁 New short-lived access token
       );
 
       const newRefreshToken = this.jwtService.sign(

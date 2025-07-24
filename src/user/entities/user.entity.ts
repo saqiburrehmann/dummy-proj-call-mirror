@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Contact } from '../../contact/entities/contact.entity';
+import { NotificationSubscription } from 'src/notifications/entities/notification-subscription.entity';
 
 @Entity('users')
 export class User {
@@ -60,4 +61,7 @@ export class User {
 
   @OneToMany(() => Contact, (contact) => contact.contactUser)
   contactOf: Contact[];
+
+  @OneToMany(() => NotificationSubscription, (sub) => sub.user)
+  subscriptions: NotificationSubscription[];
 }
